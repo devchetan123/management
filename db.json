@@ -1,0 +1,41 @@
+{
+  "data" : [
+    {
+      "id" : "1",
+      "country" : "INDIA",
+      "city" : "DELHI",
+      "population" : "12,83,833"
+    },
+    
+    {
+      "id" : "2",
+      "country" : "AMERICA",
+      "city" : "WASHINGTON",
+      "population" : "12,83,833"
+    },
+    {
+      "id" : "3",
+      "country" : "CHINA",
+      "city" : "SHANGHAI",
+      "population" : "15,33,232"
+    },
+    {
+      "id" : "4",
+      "country" : "RUSSIA",
+      "city" : "MOSCOW",
+      "population" : "8,32,522"
+    },
+    {
+      "id" : "5",
+      "country" : "INDIA",
+      "city" : "MUMBAI",
+      "population" : "12,83,833"
+    },
+    {
+      "id" : "6",
+      "country" : "JAPAN",
+      "city" : "TOKYO",
+      "population" : "9,83,833"
+    }
+  ]
+}

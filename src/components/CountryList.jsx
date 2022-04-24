@@ -1,0 +1,94 @@
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import axios from "axios"
+import Rows from './Rows';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+export default function CustomizedTables() {
+
+    const [rows, setRows] = React.useState([])
+    const [filterTap, setFilterTap] = React.useState(false)
+    const [country, setCountry] = React.useState("")
+    const [fill, setfill] = React.useState([])
+
+    const choose = () => {
+        let country = new Set()
+        
+        rows.forEach(x => {
+            country.add(x.country)
+        })
+        country = [...country]
+  
+        return country
+     }
+
+    React.useEffect(() => {
+        
+        
+        axios.get("http://localhost:3000/data")
+        .then(res => setRows(res.data))
+
+        let a = choose()
+        setfill(a)
+        
+
+    }, [filterTap])
+
+    const filterByCountry = (e) => {
+        setCountry(e.currentTarget.value)
+          axios.get(`http://localhost:3000/data?country=${country}`)
+        .then(res => setRows(res.data))
+    }
+
+   const x = () => {
+       return <p onClick={() => setFilterTap(true)} >COUNTRY</p>
+   }
+
+  
+
+  return (
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell  align="center" >
+                {filterTap ? <><select onChange={filterByCountry} >
+                  {fill.map(x => {
+                      return <option value={x} >{x}</option>
+                  })}
+              </select>
+              <button onClick={() => setFilterTap(false)} >  &nbsp; x &nbsp;</button>
+              </>
+              : x() }
+            </StyledTableCell>
+            <StyledTableCell align="center">CITY</StyledTableCell>
+            <StyledTableCell align="center">POPULATION</StyledTableCell>
+            <StyledTableCell align="center">EDIT</StyledTableCell>
+            <StyledTableCell align="center">DELETE</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <Rows key={row.id} row={row}/>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
