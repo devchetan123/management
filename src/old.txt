@@ -23,21 +23,45 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 export default function CustomizedTables() {
 
     const [rows, setRows] = React.useState([])
+    const [filterTap, setFilterTap] = React.useState(false)
     const [country, setCountry] = React.useState("")
+    const [fill, setfill] = React.useState([])
 
+    const choose = () => {
+        let country = new Set()
+        
+        rows.forEach(x => {
+            country.add(x.country)
+        })
+        country = [...country]
+  
+        return country
+     }
 
     React.useEffect(() => {
         
         axios.get("http://localhost:3000/data")
         .then(res => setRows(res.data))
 
-    }, [])
+        let a = choose()
+        setfill(a)
+        
+
+    }, [filterTap])
 
     const filterByCountry = (e) => {
+        console.log("start")
         setCountry(e.currentTarget.value)
           axios.get(`http://localhost:3000/data?country=${country}`)
         .then(res => setRows(res.data))
+        console.log("end")
     }
+
+   const x = () => {
+       return <p onClick={() => setFilterTap(true)} >COUNTRY</p>
+   }
+
+  
 
   return (
     <TableContainer component={Paper}>
@@ -45,13 +69,14 @@ export default function CustomizedTables() {
         <TableHead>
           <TableRow>
             <StyledTableCell  align="center" >
-                <select onChange={filterByCountry} >
-                    <option value="INDIA">INDIA</option>
-                    <option value="AMERICA">AMERICA</option>
-                    <option value="CHINA">CHINA</option>
-                    <option value="JAPAN">JAPAN</option>
-
-                </select>
+                {filterTap ? <><select onChange={filterByCountry} >
+                  {fill.map(x => {
+                      return <option value={x} >{x}</option>
+                  })}
+              </select>
+              <button onClick={() => setFilterTap(false)} >  &nbsp; x &nbsp;</button>
+              </>
+              : x() }
             </StyledTableCell>
             <StyledTableCell align="center">CITY</StyledTableCell>
             <StyledTableCell align="center">POPULATION</StyledTableCell>
